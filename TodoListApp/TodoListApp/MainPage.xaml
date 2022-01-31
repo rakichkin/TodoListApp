@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TodoListApp"
+             xmlns:input="clr-namespace:Plugin.InputKit.Shared.Controls;assembly=Plugin.InputKit"
+             x:Class="TodoListApp.MainPage">
+
+    <ContentPage.BindingContext>
+        <local:TodoViewModel />
+    </ContentPage.BindingContext>
+    
+    <StackLayout>
+        <Entry
+            x:Name="InputField"
+            Text="{Binding NewTodoInputValue}"
+            Placeholder="Enter a task"
+            ReturnCommand="{Binding AddTodoCommand}"
+        />
+
+        <ListView x:Name="TodoList" ItemsSource="{Binding TodoItems}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <FlexLayout JustifyContent="SpaceBetween" AlignItems="Center" Padding="12, 0">
+                            <input:CheckBox IsChecked="{Binding IsComplete}" />
+                            
+                            <Label Text="{Binding TodoText}" FontSize="Large" />
+                            
+                            <ImageButton 
+                                Source="delete.png"  
+                                Scale="0.8"
+                                Command="{Binding Path=BindingContext.RemoveTodoCommand, Source={x:Reference TodoList}}"
+                                CommandParameter="{Binding .}"
+                            />
+                            <!--
+                            Source in command property telling us that remove method should be run on todoList
+                            CommandParameter passing in to RemoveTodoItem() method like object o
+                            -->
+                        </FlexLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+
+</ContentPage>
